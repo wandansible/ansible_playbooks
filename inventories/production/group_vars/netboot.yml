@@ -1,0 +1,5 @@
+---
+netboot_server: pxe.wand.nz
+netboot_locale: en_NZ.UTF-8
+netboot_timezone: "{{ ntp_timezone }}"
+netboot_domain: wand.nz

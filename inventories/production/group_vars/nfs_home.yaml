@@ -1,0 +1,6 @@
+---
+sssd_mkhomedir: false
+
+storage_mounts:
+
+idmapd_domain:

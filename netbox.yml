@@ -1,0 +1,16 @@
+---
+- name: Deploy database services on netbox servers
+  hosts: netbox_servers
+  roles:
+    - geerlingguy.postgresql
+    - geerlingguy.redis
+  environment: "{{ environment_variables }}"
+
+- name: Deploy netbox services on netbox servers
+  hosts: netbox_servers
+  roles:
+    - wandansible.netbox
+    - wandansible.apache
+    - geerlingguy.certbot
+    - wandansible.certbot.hooks
+  environment: "{{ environment_variables }}"

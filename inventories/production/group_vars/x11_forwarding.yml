@@ -1,0 +1,3 @@
+---
+sshd_config_x11_forwarding:
+  X11Forwarding: "yes"

@@ -1,0 +1,34 @@
+---
+people:
+  - username: example
+    name: Example User
+    uid: 5000
+    group: wand
+    password: $6$2xxxxx
+    groups: ["sudo"]
+    append: yes
+    home_create: yes
+    authorized_keys:
+      - "ssh-ed25519 AAAAAAA example@example-host"
+    authorized_keys_exclusive: no
+    shell: /bin/bash
+
+  - username: example-system
+    name: Example System User
+    system: yes
+    uid: 4000
+    group: 8008
+    home: /var/lib/example
+    home_mode: "0770"
+    home_create: yes
+    shell: /bin/bash
+
+people_groups:
+  - name: wand
+    gid: 8008
+
+  - name: docker
+    gid: 902
+
+  - name: libvirt
+    gid: 901

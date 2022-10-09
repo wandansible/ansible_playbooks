@@ -1,0 +1,21 @@
+---
+- name: Deploy amp services on amp servers
+  hosts: amp_servers
+  roles:
+    - wandansible.rabbitmq
+    - wandansible.influxdb
+    - geerlingguy.postgresql
+    - wandansible.amp.collector
+    - amp.eventing
+    - wandansible.amp.web
+    - wandansible.certbot.hooks
+    - geerlingguy.certbot
+  environment: "{{ environment_variables }}"
+
+- name: Deploy amplet services on amp clients
+  hosts: amp_clients
+  roles:
+    - role: wandansible.rabbitmq
+      when: "'amp_servers' not in group_names"
+    - wandansible.amp.client
+  environment: "{{ environment_variables }}"

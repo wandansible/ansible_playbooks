@@ -1,0 +1,7 @@
+---
+- name: Deploy VPN tunnels on machines with VPNs
+  hosts:
+    - vpn
+  roles:
+    - krzysztof-magosa.strongswan
+  environment: "{{ environment_variables }}"

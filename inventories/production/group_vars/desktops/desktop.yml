@@ -1,0 +1,29 @@
+---
+desktop_env: ubuntu-desktop
+desktop_dm_configs:
+  - dm: gdm3
+    config:
+      org/gnome/login-screen:
+        disable-user-list: "true"
+  - dm: sddm
+    config:
+      Users: {}
+      X11:
+        SessionLogFile: ""
+  - dm: lightdm
+    config:
+      Seat:*:
+        allow-guest: "false"
+        greeter-hide-users: "true"
+        greeter-show-manual-login: "true"
+        user-session: "{{ (desktop_env_sessions | selectattr('env', 'equalto', desktop_env) | first).session }}"
+
+desktop_nfs_home: true
+
+desktop_printers:
+desktop_printer_drivers:
+samba_workgroup:
+
+libvirt_install_virtmanager: true
+
+docker_compose_install: true

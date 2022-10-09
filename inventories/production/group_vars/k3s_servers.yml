@@ -1,0 +1,3 @@
+---
+kubernetes_venv: /opt/kubernetes/venv
+kubernetes_kubeconfig: /etc/rancher/k3s/k3s.yaml

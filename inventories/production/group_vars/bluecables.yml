@@ -1,0 +1,22 @@
+---
+ntp_timezone: "Pacific/Auckland"
+ntp_servers:
+  - "pool.ntp.net.nz iburst"
+
+netmask_v4: "24"
+netmask_v6: "64"
+
+gateway_v4:
+gateway_v6:
+
+dns_nameservers:
+
+dns_search:
+
+debian_mirror: "https://mirror.fsmg.org.nz/debian/"
+ubuntu_mirror: "https://mirror.fsmg.org.nz/ubuntu/"
+raspi_mirror: "https://mirror.fsmg.org.nz/raspberrypi/debian/"
+
+ldap_auth_host:
+ldap_auth_port:
+ldap_auth_base:

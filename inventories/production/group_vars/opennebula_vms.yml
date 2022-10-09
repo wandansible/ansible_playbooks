@@ -1,0 +1,6 @@
+---
+one_frontend:
+one_api_password:
+one_vm_pinned: true
+
+swap_file_size: "{{ one_vm.memory }}"

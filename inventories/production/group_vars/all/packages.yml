@@ -1,0 +1,11 @@
+---
+apt_repos: "{{
+  (desktop_apt_repos | default([]) +
+   development_apt_repos | default([])) | unique
+  }}"
+packages_install: "{{
+  (desktop_packages_install | default([]) +
+   development_packages_install | default([]) +
+   development_libraries_packages_install | default([]) +
+   servers_packages_install | default([])) | unique
+  }}"

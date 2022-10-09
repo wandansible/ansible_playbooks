@@ -1,0 +1,14 @@
+---
+certbot_admin_email: "{{ mailto }}"
+certbot_auto_renew: false
+certbot_create_if_missing: true
+certbot_create_standalone_stop_services: []
+certbot_create_command: >-
+  {{ certbot_script }} certonly
+  --noninteractive --agree-tos
+  --webroot --webroot-path {{ cert_item.webroot }}
+  --email {{ cert_item.email | default(certbot_admin_email) }}
+  --pre-hook /etc/letsencrypt/renewal-hooks/pre/hook.sh
+  --post-hook /etc/letsencrypt/renewal-hooks/post/hook.sh
+  --deploy-hook /etc/letsencrypt/renewal-hooks/deploy/hook.sh
+  -d {{ cert_item.domains | join(',') }}

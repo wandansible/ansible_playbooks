@@ -1,0 +1,23 @@
+---
+- name: Deploy database services on DHCP servers
+  hosts: dhcp_servers
+  roles:
+    - name: geerlingguy.postgresql
+      when: stork_server_install | default(true)
+  environment: "{{ environment_variables }}"
+
+- name: Deploy DHCP services on DHCP servers
+  hosts: dhcp_servers
+  roles:
+    - wandansible.kea
+    - name: wandansible.stork
+      when: >-
+        stork_server_install | default(true) or
+        stork_agent_install | default(true)
+    - name: wandansible.apache
+      when: stork_server_install | default(true)
+    - name: wandansible.certbot.hooks
+      when: stork_server_install | default(true)
+    - name: geerlingguy.certbot
+      when: stork_server_install | default(true)
+  environment: "{{ environment_variables }}"

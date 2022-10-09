@@ -1,0 +1,30 @@
+---
+user_source: "ldap"
+ldap_default_filter_groups:
+  - root
+ldap_filter_groups: []
+ldap_config:
+  id_provider: "ldap"
+  auth_provider: "ldap"
+  ldap_uri: "ldaps://{{ ldap_auth_host }}:{{ ldap_auth_port }}"
+  ldap_id_use_start_tls: "true"
+  ldap_search_base: "{{ ldap_auth_base }}"
+  ldap_tls_reqcert: "demand"
+  ldap_tls_cacert: "/etc/ssl/ldap/cacert.pem"
+  cache_credentials: "true"
+  enumerate: "true"
+  sudo_provider: "none"
+ldap_extra_config: {}
+sssd_config:
+  sssd:
+    config_file_version: "2"
+    domains: "LDAP"
+    services: ["nss", "pam", "sudo", "ssh"]
+  nss:
+    filter_users: "root"
+    filter_groups: "{{ (ldap_default_filter_groups + ldap_filter_groups) | join(', ') }}"
+  domain/LDAP: "{{ ldap_config | combine(ldap_extra_config) }}"
+
+sshd_config_ldap:
+  AuthorizedKeysCommand: /usr/bin/sss_ssh_authorizedkeys
+  AuthorizedKeysCommandUser: nobody

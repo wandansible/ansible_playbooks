@@ -1,0 +1,11 @@
+---
+primary_interface: eno1
+network_interfaces:
+  - name: "{{ primary_interface }}"
+    waitonboot: true
+    match_mac: "{{ primary_mac_addr }}"
+    families:
+      - name: ipv4
+        type: dhcp
+      - name: ipv6
+        type: auto

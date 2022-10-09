@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -euo pipefail
+
+ansible_dir="${HOME}/.ansible"
+PATH="${ansible_dir}/venv/bin:${PATH}"
+
+cmd=$1
+shift
+
+${cmd} "$@"

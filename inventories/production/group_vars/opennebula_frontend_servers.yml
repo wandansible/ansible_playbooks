@@ -1,0 +1,35 @@
+---
+apache_mods_enabled:
+  - proxy
+  - proxy_http
+apache_vhosts:
+  - servername: "{{ one_servername }}"
+    serveralias: "{{ one_serveralias }}"
+    serveradmin: "{{ mailto }}"
+    https_redirect: |
+      Redirect permanent / https://{{ one_servername }}/
+apache_vhosts_ssl:
+  - servername: "{{ one_servername }}"
+    serveralias: "{{ one_serveralias }}"
+    serveradmin: "{{ mailto }}"
+    certificate_file: /etc/letsencrypt/live/{{ one_servername }}/fullchain.pem
+    certificate_key_file: /etc/letsencrypt/live/{{ one_servername }}/privkey.pem
+    extra_parameters: |
+      {% if one_acl_networks is defined and one_acl_networks != [] %}
+      <Location "/">
+      {% for ip in one_acl_networks %}
+        Require ip {{ ip }}
+      {% endfor %}
+        Require local
+      </Location>
+
+      <Location "/.well-known/acme-challenge/">
+        Require all granted
+      </Location>
+
+      {% endif %}
+      ProxyPass /.well-known/acme-challenge/ !
+      ProxyPass / http://127.0.0.1:9869/
+      ProxyPassReverse / http://127.0.0.1:9869/
+apache_conf_templates:
+  - conf/letsencrypt.conf

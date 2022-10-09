@@ -1,0 +1,8 @@
+---
+docker_daemon:
+  hosts:
+    - unix:///var/run/docker.sock
+  live-restore: true
+  iptables: false
+  ip-forward: false
+  ip-masq: false

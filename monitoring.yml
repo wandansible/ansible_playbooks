@@ -1,0 +1,11 @@
+---
+- name: Deploy monitoring services on monitoring servers
+  hosts: monitoring_servers
+  roles:
+    - cloudalchemy.prometheus
+    - cloudalchemy.grafana
+    - cloudalchemy.alertmanager
+    - wandansible.apache
+    - geerlingguy.certbot
+    - wandansible.certbot.hooks
+  environment: "{{ environment_variables }}"

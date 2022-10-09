@@ -1,0 +1,14 @@
+---
+- name: Deploy docker on docker machines
+  hosts:
+    - docker
+  roles:
+    - wandansible.docker
+  environment: "{{ environment_variables }}"
+
+- name: Deploy libvirt on libvirt machines
+  hosts:
+    - libvirt
+  roles:
+    - wandansible.libvirt
+  environment: "{{ environment_variables }}"

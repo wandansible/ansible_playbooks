@@ -1,0 +1,133 @@
+---
+- name: Must use recent ansible version
+  ansible.builtin.assert:
+    that: ansible_version.full is version('2.12.0', '>=')
+    fail_msg: "Please upgrade ansible to 2.12.0 or newer"
+    success_msg: "Ansible {{ ansible_version.full }} found"
+
+- name: Check if working directory is checked out from git
+  ansible.builtin.stat:
+    path: ./.git
+  delegate_to: localhost
+  register: sanity_check_git_dir
+
+- name: Must deploy from directory checked out from git
+  ansible.builtin.assert:
+    that: sanity_check_git_dir.stat.exists
+    fail_msg: "The current working directory isn't checked out from git"
+    success_msg: "The current working directory is checked out from git"
+
+- name: Set ansible module directory fact
+  ansible.builtin.set_fact:
+    ansible_module_dir: "{{ lookup('env', 'HOME') }}/.ansible"
+
+- name: Check if ansible module directory has a stamp
+  ansible.builtin.stat:
+    path: "{{ ansible_module_dir }}/.stamp"
+  delegate_to: localhost
+  register: sanity_check_ansible_module_dir
+
+- name: Ansible module directory must have a stamp
+  ansible.builtin.assert:
+    that: sanity_check_ansible_module_dir.stat.exists
+    fail_msg: "Ansible module directory is missing a stamp, please run boot.sh"
+    success_msg: "Ansible module directory has a stamp"
+
+- name: Check if python virtual environment has a stamp
+  ansible.builtin.stat:
+    path: "{{ ansible_module_dir }}/venv/.stamp"
+  delegate_to: localhost
+  register: sanity_check_venv
+
+- name: Python virtual envinronment must have a stamp
+  ansible.builtin.assert:
+    that: sanity_check_venv.stat.exists
+    fail_msg: "Python virtual environment is missing a stamp, please run boot.sh"
+    success_msg: "Python virtual environment has a stamp"
+
+- name: Set git repo facts
+  ansible.builtin.set_fact:
+    ansible_git_repo_branch: "{{ lookup('pipe', 'git rev-parse --abbrev-ref HEAD') }}"
+    ansible_git_repo_hash: "{{ lookup('pipe', 'git describe --always --dirty=-dirty') }}"
+    ansible_current_requirements_hash: "{{ lookup('file', ansible_module_dir + '/.stamp') }}"
+    ansible_expected_requirements_hash: "{{ lookup('pipe', 'git log -n 1 --pretty=format:%H -- requirements.yml') }}"
+    ansible_current_venv_hash: "{{ lookup('file', ansible_module_dir + '/venv/.stamp') }}"
+    ansible_expected_venv_hash: "{{ lookup('pipe', 'git log -n 1 --pretty=format:%H -- requirements.txt') }}"
+
+- name: Must deploy from git main branch
+  ansible.builtin.assert:
+    that: ansible_git_repo_branch == 'main'
+    fail_msg: "Current git branch '{{ ansible_git_repo_branch }}' is not 'main'"
+    success_msg: "Current git branch is 'main'"
+  failed_when: false
+  changed_when: "'evaluated_to' in sanity_check_git_branch"
+  register: sanity_check_git_branch
+
+- name: Must not deploy from dirty git tree
+  ansible.builtin.assert:
+    that: "'dirty' not in ansible_git_repo_hash"
+    fail_msg: "Local git working tree has local changes"
+    success_msg: "Local git working tree has no local changes"
+  failed_when: false
+  changed_when: "'evaluated_to' in sanity_check_dirty_git_tree"
+  register: sanity_check_dirty_git_tree
+
+- name: Must have run boot.sh recently
+  ansible.builtin.assert:
+    that: ansible_current_requirements_hash == ansible_expected_requirements_hash
+    fail_msg: "Ansible module directory out of sync with requirements.yml, please run boot.sh"
+    success_msg: "Ansible module directory in sync with requirements.yml"
+  failed_when: false
+  changed_when: "'evaluated_to' in sanity_check_requirements_hash"
+  register: sanity_check_requirements_hash
+
+- name: Must have up-to-date python requirements installed
+  ansible.builtin.assert:
+    that: ansible_current_venv_hash == ansible_expected_venv_hash
+    fail_msg: "Python virtual environment out of sync with requirements.txt, please run boot.sh"
+    success_msg: "Python virtual environment in sync with requirements.txt"
+  failed_when: false
+  changed_when: "'evaluated_to' in sanity_check_python_requirements"
+  register: sanity_check_python_requirements
+
+- name: Must have up-to-date python virtual environment
+  ansible.builtin.assert:
+    that: _current_version == _expected_version
+    fail_msg: "Python virtual environment version is not the same as current python version, please run boot.sh"
+    success_msg: "Python virtual environment up-to-date"
+  failed_when: false
+  changed_when: "'evaluated_to' in sanity_check_venv_version"
+  register: sanity_check_venv_version
+  vars:
+    _current_version: "{{ lookup('pipe', 'grep version ' + ansible_module_dir + '/venv/pyvenv.cfg').split(' = ')[1] }}"
+    _expected_version: "{{ lookup('pipe', '/usr/bin/python3 --version').split(' ')[1] }}"
+
+- name: Must use python virtual environment
+  ansible.builtin.assert:
+    that: ansible_module_dir + '/venv/bin' in lookup('env', 'PATH')
+    fail_msg: "Not using python virtual environment"
+    success_msg: "Using python virtual environment"
+  failed_when: false
+  changed_when: "'evaluated_to' in sanity_check_using_venv"
+  register: sanity_check_using_venv
+
+- name: Continue after failed sanity check?
+  ansible.builtin.pause:
+    prompt: One or more sanity checks failed, do you wish to continue with the play? (y/n)
+  register: sanity_check_continue_response
+  when: >
+    ('evaluated_to' in sanity_check_git_branch and not sanity_check_git_branch.evaluated_to) or
+    ('evaluated_to' in sanity_check_dirty_git_tree and not sanity_check_dirty_git_tree.evaluated_to) or
+    ('evaluated_to' in sanity_check_requirements_hash and not sanity_check_requirements_hash.evaluated_to) or
+    ('evaluated_to' in sanity_check_python_requirements and not sanity_check_python_requirements.evaluated_to) or
+    ('evaluated_to' in sanity_check_venv_version and not sanity_check_venv_version.evaluated_to) or
+    ('evaluated_to' in sanity_check_using_venv and not sanity_check_using_venv.evaluated_to)
+
+- name: Check if we should continue or not
+  ansible.builtin.assert:
+    that: >
+      sanity_check_continue_response.user_input | lower == 'y' or
+      sanity_check_continue_response.user_input | lower == 'yes'
+    fail_msg: "User response '{{ sanity_check_continue_response.user_input }}' is not 'y'"
+    success_msg: "Sanity check overriden"
+  when: "'user_input' in sanity_check_continue_response"

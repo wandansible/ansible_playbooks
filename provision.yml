@@ -1,0 +1,69 @@
+---
+# Provision ansible playbook, for first-time ansible runs only
+
+- name: Sanity check before running playbook
+  import_playbook: sanity-check.yml
+
+- name: Provision OpenNebula virtual machines
+  hosts: opennebula_vms
+  gather_facts: false
+  roles:
+    - wandansible.provision.opennebula
+  environment: "{{ environment_variables }}"
+
+- name: Provision Raspberry Pi machines
+  hosts: raspberry_pi
+  gather_facts: false
+  roles:
+    - wandansible.provision.raspberry_pi
+  environment: "{{ environment_variables }}"
+
+- name: Provision netbooted machines
+  hosts: netboot
+  gather_facts: false
+  roles:
+    - wandansible.provision.netboot
+  environment: "{{ environment_variables }}"
+
+- name: Provision generic machines
+  hosts:
+    - all
+    - "!opennebula_vms"
+    - "!raspberry_pi"
+    - "!netboot"
+  gather_facts: false
+  roles:
+    - wandansible.provision.generic
+  environment: "{{ environment_variables }}"
+
+- name: Site playbook (stage 1) as provision user using public key SSH authentication
+  vars:
+    ansible_user: "{{ provision_user_username }}"
+    ansible_ssh_private_key_file: "{{ provision_user_private_key_file }}"
+    ansible_become_pass: "{{ provision_user_password }}"
+  import_playbook: site.stage1.yml
+  when: provision_user_ssh_password == ""
+
+- name: Site playbook (stage 1) as provision user using password-based SSH authentication
+  vars:
+    ansible_user: "{{ provision_user_username }}"
+    ansible_ssh_pass: "{{ provision_user_ssh_password }}"
+    ansible_become_pass: "{{ provision_user_password }}"
+  import_playbook: site.stage1.yml
+  when: provision_user_ssh_password != ""
+
+- name: Site playbook (stage 2) as normal user
+  import_playbook: site.stage2.yml
+
+# A reboot is required to cleanly remove the provision user
+- name: Reboot and remove provision user
+  hosts: all
+  tasks:
+    - name: Reboot and remove the provision user
+      ansible.builtin.import_role:
+        name: wandansible.provision
+        tasks_from: reboot
+  environment: "{{ environment_variables }}"
+
+- name: Stamp machines that ran playbooks successfully
+  import_playbook: stamp.yml

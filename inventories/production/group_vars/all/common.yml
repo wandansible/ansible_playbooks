@@ -1,0 +1,5 @@
+---
+stamp_file_path: "/.ansible_stamp"
+postgresql_python_library: python3-psycopg2
+environment_variables:
+  NEEDRESTART_MODE: a

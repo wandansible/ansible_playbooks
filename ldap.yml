@@ -1,0 +1,7 @@
+---
+- name: Deploy ldap services on ldap clients
+  hosts: all
+  roles:
+    - role: wandansible.sssd
+      when: user_source == "ldap"
+  environment: "{{ environment_variables }}"

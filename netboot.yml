@@ -1,0 +1,9 @@
+---
+- name: Deploy netboot services on netboot servers
+  hosts: netboot_servers
+  roles:
+    - wandansible.netboot
+    - wandansible.apache
+    - geerlingguy.certbot
+    - wandansible.certbot.hooks
+  environment: "{{ environment_variables }}"

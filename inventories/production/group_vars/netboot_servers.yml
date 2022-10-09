@@ -1,0 +1,29 @@
+---
+apache_vhosts:
+  - servername: "{{ inventory_hostname }}"
+    serveradmin: "{{ mailto }}"
+    https_redirect: |
+      Redirect permanent / https://{{ inventory_hostname }}/
+apache_vhosts_ssl:
+  - servername: "{{ inventory_hostname }}"
+    serveradmin: "{{ mailto }}"
+    documentroot: /srv/https
+    options: FollowSymLinks
+    allow_override: None
+    certificate_file: /etc/letsencrypt/live/{{ inventory_hostname }}/fullchain.pem
+    certificate_key_file: /etc/letsencrypt/live/{{ inventory_hostname }}/privkey.pem
+    extra_parameters: |
+      {% if netboot_acl_networks is defined and netboot_acl_networks != [] %}
+      <Location "/">
+      {% for ip in netboot_acl_networks %}
+        Require ip {{ ip }}
+      {% endfor %}
+        Require local
+      </Location>
+
+      <Location "/.well-known/acme-challenge/">
+          Require all granted
+      </Location>
+      {% endif %}
+apache_conf_templates:
+  - conf/letsencrypt.conf

@@ -1,0 +1,27 @@
+---
+development_packages_install:
+  - "autoconf"
+  - "automake"
+  - "bison"
+  - "build-essential"
+  - "flex"
+  - "gdb"
+  - "libhugetlbfs-bin"
+  - "libtool"
+  - "pkg-config"
+  - "valgrind"
+
+development_libraries_packages_install:
+  - "libbz2-dev"
+  - "libcurl4-openssl-dev"
+  - "liblz4-dev"
+  - "liblzma-dev"
+  - "liblzo2-dev"
+  - "libncurses-dev"
+  - "libnuma-dev"
+  - "libpcap-dev"
+  - "libssl-dev"
+  - "libyaml-dev"
+  - "libzstd-dev"
+  - "uthash-dev"
+  - "zlib1g-dev"

@@ -1,0 +1,70 @@
+---
+- name: Deploy base roles for all machines
+  hosts: all
+  roles:
+    - geerlingguy.ntp
+    - hifis.unattended_upgrades
+    - manala.roles.motd
+    - nullmailer.backports
+    - infothrill.nullmailer
+  environment: "{{ environment_variables }}"
+
+- name: Deploy desktop roles on all desktops
+  hosts: desktops
+  roles:
+    - wandansible.desktop
+  environment: "{{ environment_variables }}"
+
+- name: Deploy bearwall for all machines
+  hosts: all
+  roles:
+    - role: bearwall2
+      when:
+        - bearwall2_interfaces is defined
+        - bearwall2_interfaces | length > 0
+  environment: "{{ environment_variables }}"
+
+- name: Deploy systemd network namespaces
+  hosts: all
+  roles:
+    - role: wandansible.systemd_named_netns
+      when:
+        - netns is defined
+        - netns | length > 0
+  environment: "{{ environment_variables }}"
+
+- name: Deploy amp services on amp servers and clients
+  import_playbook: amp.yml
+
+- name: Deploy virtualisation software on virt machines
+  import_playbook: virt.yml
+
+- name: Deploy OpenNebula services on OpenNebula servers
+  import_playbook: opennebula.yml
+
+- name: Deploy out of band services on oob servers
+  import_playbook: oob.yml
+
+- name: Deploy VPN tunnels on machines with VPNs
+  import_playbook: vpn.yml
+
+- name: Deploy netbox services on netbox servers
+  import_playbook: netbox.yml
+
+- name: Deploy kubernetes clusters
+  import_playbook: kubernetes.yml
+
+- name: Deploy github actions runners
+  import_playbook: github-actions.yml
+
+- name: Deploy monitoring services on monitoring servers
+  import_playbook: monitoring.yml
+
+- name: Deploy DHCP services on DHCP servers
+  import_playbook: dhcp.yml
+
+- name: Deploy netboot services on netboot servers
+  import_playbook: netboot.yml
+
+- name: Deploy prometheus exporters
+  import_playbook: prometheus_exporters.yml

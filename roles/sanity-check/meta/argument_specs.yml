@@ -1,0 +1,14 @@
+---
+argument_specs:
+  main:
+    short_description: Perform checks before running playbooks
+    description: |
+      Check the environment running the playbook and if any checks
+      fail ask if the play should continue or not.
+      Checks include: ansible-core >= 2.12,
+      the working directory is checked out from git,
+      the current branch checked out is 'main',
+      there are no local changes in the git working tree,
+      using a python virtual environment,
+      and latest ansible-galaxy and python requirements are installed.
+    options: {}

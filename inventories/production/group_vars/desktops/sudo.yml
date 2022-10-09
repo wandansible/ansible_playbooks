@@ -1,0 +1,11 @@
+---
+sudoers:
+  - file: cmnd_aliases
+    contents: |
+      Cmnd_Alias SOFTWARE = /usr/bin/apt-get, /usr/bin/apt, /usr/bin/snap
+      Cmnd_Alias SERVICES = /usr/sbin/service, /bin/systemctl
+      Cmnd_Alias PROCESSES = /usr/bin/renice, /bin/kill, /usr/bin/killall
+      Cmnd_Alias DOCKER = /usr/bin/docker
+  - file: owner
+    contents: |
+      {{ desktop_owner }} ALL=(root) SOFTWARE, SERVICES, PROCESSES, DOCKER

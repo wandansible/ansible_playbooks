@@ -1,0 +1,127 @@
+---
+groups:
+  - name: servers
+    description: server machines
+    children:
+      - name: amp_servers
+        description: amp collector servers
+
+      - name: trace_servers
+        description: servers for dealing with network packets
+
+      - name: oob_servers
+        description: out-of-band management servers
+
+      - name: opennebula_servers
+        description: all opennebula servers
+        children:
+          - name: opennebula_frontend_servers
+            description: opennebula frontend servers
+
+          - name: opennebula_host_servers
+            description: opennebula hypervisors
+
+      - name: monitoring_servers
+        description: servers used for monitoring
+
+      - name: netbox_servers
+        description: netbox servers
+
+      - name: k3s_servers
+        description: k3s servers
+        children:
+          - name: github_actions_runner_controllers
+            description: self-hosted github actions runner controller servers
+
+      - name: dhcp_servers
+        description: servers handling DHCP
+
+      - name: netboot_servers
+        description: servers for enabling network booting
+
+  - name: desktops
+    description: desktop machines
+    groups:
+      - ldap
+      - nfs_home
+      - docker
+      - libvirt
+      - dev
+
+  - name: ldap
+    description: machines using ldap authentication
+
+  - name: nfs_home
+    description: machines with a nfs /home mount
+
+  - name: dev
+    description: machine is used for development so install compilers and libraries
+
+  - name: x11_forwarding
+    description: machines with x11 forwarding enabled
+
+  - name: docker
+    description: machines with docker installed
+
+  - name: libvirt
+    description: machines with libvirt installed
+
+  - name: vpn
+    description: machines with VPN tunnels
+
+  - name: opennebula_vms
+    description: hosts deployed as OpenNebula virtual machines
+
+  - name: raspberry_pi
+    description: hosts deployed on Raspberry Pi hardware
+
+  - name: netboot
+    description: machines with os installed via netboot
+
+  - name: ubuntu
+    description: machines with Ubuntu installed via netboot
+    groups:
+      - netboot
+
+  - name: debian
+    description: machines with Debian installed via netboot
+    groups:
+      - netboot
+
+  - name: ubuntu_focal
+    description: machines with Ubuntu 20.04 (Focal) installed via netboot
+    groups:
+      - ubuntu
+
+  - name: debian_buster
+    description: machines with Debian 10 (Buster) installed via netboot
+    groups:
+      - debian
+
+  - name: debian_bullseye
+    description: machines with Debian 11 (Bullseye) installed via netboot
+    groups:
+      - debian
+
+regions:
+  bluecables: {}
+  redcables: {}
+
+hosts:
+  - name: example1.wand.nz
+    region: bluecables
+    groups:
+      - trace_servers
+      - ldap
+      - nfs_home
+      - dev
+
+  - name: example2.wand.nz
+    region: redcables
+    groups:
+      - desktops
+
+  - name: example3.wand.nz
+    region: redcables
+    groups:
+      - servers

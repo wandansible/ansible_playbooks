@@ -1,0 +1,11 @@
+---
+rabbitmq_tls_listeners:
+  - "5671"
+rabbitmq_tls_cacertfile: "{{ amppki_cacertfile }}"
+rabbitmq_tls_certfile: "{{ amppki_certfile }}"
+rabbitmq_tls_keyfile: "{{ amppki_keyfile }}"
+rabbitmq_auth_mechanisms:
+  - "PLAIN"
+  - "EXTERNAL"
+rabbitmq_enabled_plugins:
+  - "rabbitmq_auth_mechanism_ssl"

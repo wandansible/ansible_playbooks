@@ -1,0 +1,63 @@
+---
+root_password:
+
+network_interfaces:
+  - name: eno1
+    waitonboot: true
+    dns_nameservers: "{{ dns_nameservers }}"
+    dns_search: "{{ dns_search }}"
+    families:
+      - name: ipv4
+        type: static
+        address: "10.0.0.1/{{ netmask_v4 }}"
+        gateway: "{{ gateway_v4 }}"
+      - name: ipv6
+        type: static
+        address: "2001:db8::1/{{ netmask_v6 }}"
+        gateway: "{{ gateway_v6 }}"
+
+bearwall2_classes:
+  - "{{ bearwall2_loopback_class }}"
+  - name: external
+    policies: |
+      policy in ICMP-SAFE
+      policy in STATEFUL
+      policy out accept
+    if_features:
+      disable_ipv6: 0
+      autoconf: 0
+      rp_filter: 1
+      accept_redirects: 0
+      accept_source_route: 0
+      bootp_relay: 0
+      accept_ra: 0
+      forwarding: 0
+      log_martians: 0
+      send_redirects: 0
+  - name: test
+    policies: |
+      policy inout accept
+    if_features:
+      disable_ipv6: 0
+      autoconf: 0
+      rp_filter: 1
+      accept_redirects: 0
+      accept_source_route: 0
+      bootp_relay: 0
+      accept_ra: 0
+      forwarding: 0
+      log_martians: 0
+      send_redirects: 0
+
+bearwall2_interfaces:
+  - name: lo
+    class: loopback
+  - name: eno1
+    class: external
+
+grub_cmdline:
+  - "default_hugepagesz=2M hugepagesz=2M hugepages=1024 hugepagesz=1G hugepages=4"
+  - "iommu=pt"
+  - "intel_iommu=on"
+
+scratch_backend_location: "/scratch"

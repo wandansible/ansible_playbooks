@@ -1,0 +1,60 @@
+---
+desktop_apt_repos:
+  - name: vscode
+    repo: >-
+      deb [arch=amd64 signed-by=/etc/apt/keyrings/microsoft.gpg]
+      http://packages.microsoft.com/repos/code stable main
+    key:
+      url: https://packages.microsoft.com/keys/microsoft.asc
+      id: BC528686B50D79E339D3721CEB3E94ADBE1229CF
+      keyring: /etc/apt/keyrings/microsoft.gpg
+  - name: keepassxc
+    repo: >-
+      deb [signed-by=/etc/apt/keyrings/keepassxc.gpg]
+      http://ppa.launchpad.net/phoerious/keepassxc/ubuntu {{ ansible_distribution_release }} main
+    key:
+      url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xd89c66d0e31fea2874ebd20561922ab60068fcd6
+      id: D89C66D0E31FEA2874EBD20561922AB60068FCD6
+      keyring: /etc/apt/keyrings/keepassxc.gpg
+
+desktop_packages_install:
+  - bindfs
+  - clusterssh
+  - code
+  - conntrack
+  - curl
+  - dnsutils
+  - ethtool
+  - git
+  - gmpc
+  - gnuplot
+  - gstreamer1.0-libav
+  - hexchat
+  - htop
+  - iotop
+  - irssi
+  - keepassxc
+  - libavcodec-extra
+  - libreoffice
+  - meld
+  - minicom
+  - mtr-tiny
+  - nmon
+  - picocom
+  - python3-gpg
+  - python3-pip
+  - python3-venv
+  - rsync
+  - screen
+  - smartmontools
+  - speedcrunch
+  - sshfs
+  - tcpdump
+  - texlive-full
+  - thunderbird
+  - tmux
+  - tmuxp
+  - vim
+  - vim-nox
+  - whois
+  - wireshark

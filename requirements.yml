@@ -1,0 +1,143 @@
+---
+roles:
+  - src: geerlingguy.ntp
+  - src: geerlingguy.certbot
+  - src: geerlingguy.postgresql
+    version: 3.3.1
+  - src: geerlingguy.redis
+
+  - src: hifis.unattended_upgrades
+
+  - src: krzysztof-magosa.strongswan
+
+  - src: willshersystems.sshd
+
+  - src: weareinteractive.users
+
+  - src: infothrill.nullmailer
+
+  - src: cloudalchemy.prometheus
+  - src: cloudalchemy.grafana
+  - src: cloudalchemy.alertmanager
+
+  - name: bearwall2
+    src: https://github.com/bearwall-firewall/ansible-bearwall2
+
+  - name: wandansible.docker
+    src: https://github.com/wandansible/docker
+
+  - name: wandansible.cassandra
+    src: https://github.com/wandansible/cassandra
+
+  - name: wandansible.networking
+    src: https://github.com/wandansible/networking
+
+  - name: wandansible.influxdb
+    src: https://github.com/wandansible/influxdb
+
+  - name: wandansible.ca
+    src: https://github.com/wandansible/ca
+
+  - name: wandansible.rabbitmq
+    src: https://github.com/wandansible/rabbitmq
+
+  - name: wandansible.serial
+    src: https://github.com/wandansible/serial
+
+  - name: wandansible.stamp
+    src: https://github.com/wandansible/stamp
+
+  - name: wandansible.libvirt
+    src: https://github.com/wandansible/libvirt
+
+  - name: wandansible.common
+    src: https://github.com/wandansible/common
+
+  - name: wandansible.sssd
+    src: https://github.com/wandansible/sssd
+
+  - name: wandansible.systemd_named_netns
+    src: https://github.com/wandansible/systemd_named_netns
+
+  - name: wandansible.storage
+    src: https://github.com/wandansible/storage
+
+  - name: wandansible.desktop
+    src: https://github.com/wandansible/desktop
+
+  - name: wandansible.provision
+    src: https://github.com/wandansible/provision
+
+  - name: wandansible.provision.generic
+    src: https://github.com/wandansible/provision.generic
+
+  - name: wandansible.provision.raspberry_pi
+    src: https://github.com/wandansible/provision.raspberry_pi
+
+  - name: wandansible.provision.opennebula
+    src: https://github.com/wandansible/provision.opennebula
+
+  - name: wandansible.provision.netboot
+    src: https://github.com/wandansible/provision.netboot
+
+  - name: wandansible.apache
+    src: https://github.com/wandansible/apache
+
+  - name: wandansible.netbox
+    src: https://github.com/wandansible/netbox
+
+  - name: wandansible.certbot.hooks
+    src: https://github.com/wandansible/certbot.hooks
+
+  - name: wandansible.amp.client
+    src: https://github.com/wandansible/amp.client
+
+  - name: wandansible.amp.collector
+    src: https://github.com/wandansible/amp.collector
+
+  - name: wandansible.amp.web
+    src: https://github.com/wandansible/amp.web
+
+  - name: wandansible.k3s
+    src: https://github.com/wandansible/k3s
+
+  - name: wandansible.helm
+    src: https://github.com/wandansible/helm
+
+  - name: wandansible.github_actions_runner_controller
+    src: https://github.com/wandansible/github_actions_runner_controller
+
+  - name: wandansible.opennebula.frontend
+    src: https://github.com/wandansible/opennebula.frontend
+
+  - name: wandansible.opennebula.host
+    src: https://github.com/wandansible/opennebula.host
+
+  - name: wandansible.kea
+    src: https://github.com/wandansible/kea
+
+  - name: wandansible.stork
+    src: https://github.com/wandansible/stork
+
+  - name: wandansible.prometheus_exporter
+    src: https://github.com/wandansible/prometheus_exporter
+
+  - name: wandansible.prometheus_exporter.apache
+    src: https://github.com/wandansible/prometheus_exporter.apache
+
+  - name: wandansible.prometheus_exporter.blackbox
+    src: https://github.com/wandansible/prometheus_exporter.blackbox
+
+  - name: wandansible.prometheus_exporter.mtail
+    src: https://github.com/wandansible/prometheus_exporter.mtail
+
+  - name: wandansible.prometheus_exporter.node
+    src: https://github.com/wandansible/prometheus_exporter.node
+
+  - name: wandansible.netboot
+    src: https://github.com/wandansible/netboot
+
+collections:
+  - name: manala.roles
+  - name: kubernetes.core
+  - name: community.rabbitmq

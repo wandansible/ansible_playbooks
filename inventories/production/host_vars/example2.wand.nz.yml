@@ -1,0 +1,5 @@
+---
+desktop_owner: example
+primary_mac_addr: aa:bb:cc:dd:ee:ff
+desktop_env: plasma-desktop
+root_password:

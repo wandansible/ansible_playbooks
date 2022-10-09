@@ -1,0 +1,7 @@
+---
+- name: Deploy out of band services on oob servers
+  hosts:
+    - oob_servers
+  roles:
+    - wandansible.serial
+  environment: "{{ environment_variables }}"

@@ -1,0 +1,6 @@
+---
+- name: Deploy WAND certificate authority
+  hosts: all
+  roles:
+    - wandansible.ca
+  environment: "{{ environment_variables }}"

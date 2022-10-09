@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -euo pipefail
+
+if [ -x "/usr/bin/gpg2" ]; then
+    gpg="/usr/bin/gpg2"
+else
+    gpg="/usr/bin/gpg"
+fi
+
+"${gpg}" --quiet --batch --use-agent --decrypt "gpg/vault-password.gpg"

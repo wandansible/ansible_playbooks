@@ -1,0 +1,38 @@
+---
+- name: Add users for machines managed by ansible
+  hosts: all
+  vars_files:
+    - people.yml
+  tasks:
+    - name: Create groups
+      vars:
+        group_list_match: "{{ group_list | map('regex_replace', '^(.*)$', '^\\1$') | join('|') }}"
+        user_groups: "{{ people_groups | selectattr('name', 'match', group_list_match) | list }}"
+      ansible.builtin.group:
+        name: "{{ item.name }}"
+        gid: "{{ item.gid }}"
+        state: present
+      loop: "{{ user_groups }}"
+      loop_control:
+        label: "{{ item.name }}"
+      when: user_source == "ansible" or group_source | default("none") == "ansible"
+
+    - name: Create user accounts
+      vars:
+        user_list_match: "{{ user_list | map('regex_replace', '^(.*)$', '^\\1$') | join('|') }}"
+        users: "{{ people | selectattr('username', 'match', user_list_match) | list }}"
+      ansible.builtin.import_role:
+        name: weareinteractive.users
+      when: user_source == "ansible"
+
+    - name: Add users to additional groups for this machine
+      ansible.builtin.user:
+        name: "{{ item.user }}"
+        groups: "{{ item.groups }}"
+        append: yes
+        create_home: no
+      loop: "{{ additional_groups }}"
+      loop_control:
+        label: "{{ item.user }} in groups {{ item.groups }}"
+      when: user_source == "ansible" or group_source | default("none") == "ansible"
+  environment: "{{ environment_variables }}"

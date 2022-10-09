@@ -1,0 +1,11 @@
+---
+- name: Stamp machines that ran playbooks successfully
+  hosts: all
+  vars:
+    ansible_git_repo_hash: "{{ lookup('pipe', 'git describe --always --dirty=-dirty') }}"
+    stamp_file_contents: |
+        {{ ansible_date_time.iso8601 }} {{ ansible_git_repo_hash }}
+  roles:
+    - wandansible.stamp
+  environment: "{{ environment_variables }}"
+  gather_facts: no

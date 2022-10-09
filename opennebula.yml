@@ -1,0 +1,15 @@
+---
+- name: Deploy OpenNebula front-end services on OpenNebula front-end servers
+  hosts: opennebula_frontend_servers
+  roles:
+    - wandansible.opennebula.frontend
+    - wandansible.apache
+    - wandansible.certbot.hooks
+    - geerlingguy.certbot
+  environment: "{{ environment_variables }}"
+
+- name: Deploy OpenNebula host services on OpenNebula host servers
+  hosts: opennebula_host_servers
+  roles:
+    - wandansible.opennebula.host
+  environment: "{{ environment_variables }}"

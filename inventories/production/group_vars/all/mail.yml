@@ -1,0 +1,13 @@
+---
+mailto:
+
+unattended_mail: "{{ mailto }}"
+unattended_mail_only_on_error: true
+
+nullmailer_mail_recipient: "{{ mailto }}"
+nullmailer_allmailfrom:
+nullmailer_relay_user:
+nullmailer_relay_pass:
+nullmailer_relay_host:
+nullmailer_relay_port: 465
+nullmailer_remote_ssl: true

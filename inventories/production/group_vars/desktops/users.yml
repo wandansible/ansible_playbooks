@@ -1,0 +1,13 @@
+---
+ldap_filter_groups:
+  - libvirt
+  - docker
+
+group_source: "ansible"
+group_list:
+  - libvirt
+  - docker
+additional_groups:
+  - user: "{{ desktop_owner }}"
+    groups:
+      - libvirt

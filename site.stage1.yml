@@ -1,0 +1,35 @@
+---
+- name: Initial tasks
+  hosts: all
+  pre_tasks:
+    - name: Refresh apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+      changed_when: false
+  roles:
+    - role: wandansible.networking
+      when:
+        - network_interfaces is defined
+        - network_interfaces | length >= 1
+  environment: "{{ environment_variables }}"
+  gather_facts: no
+
+- name: Deploy WAND certificate authority
+  import_playbook: ca.yml
+
+- name: Deploy ldap services on ldap clients
+  import_playbook: ldap.yml
+
+# Add users first so we don't accidentally lock ourselves by
+# locking down ssh in the next step, and so that UIDs and GIDs
+# are set by the time we start to install daemons
+- name: Add users for machines managed by ansible
+  import_playbook: users.yml
+
+- name: Deploy common, storage, and sshd roles for all machines
+  hosts: all
+  roles:
+    - wandansible.common
+    - wandansible.storage
+    - willshersystems.sshd
+  environment: "{{ environment_variables }}"

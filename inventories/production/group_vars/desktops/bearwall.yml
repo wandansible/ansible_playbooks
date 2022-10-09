@@ -1,0 +1,59 @@
+---
+bearwall2_classes:
+  - name: loopback
+    policies: |
+      policy inout accept
+      policy forward reject
+    if_features:
+      rp_filter: 1
+      accept_redirects: 0
+      accept_source_route: 0
+      bootp_relay: 0
+      accept_ra: 0
+      forwarding: 0
+      log_martians: 0
+      send_redirects: 0
+  - name: external
+    policies: |
+      policy in ip6 nexthdr icmpv6 icmpv6 type {nd-router-advert} accept comment \"icmpv6 RA\"
+      policy in ICMP-SAFE
+      policy in STATEFUL
+      policy out accept
+      policy forward oifname {docker0, virbr0} accept comment \"docker and vms\"
+      policy postrouting ip saddr {172.17.0.0/16, 192.168.122.0/24} masquerade comment \"nat docker and vms\"
+    if_features:
+      disable_ipv6: 0
+      autoconf: 1
+      rp_filter: 1
+      accept_redirects: 0
+      accept_source_route: 0
+      bootp_relay: 0
+      accept_ra: 1
+      forwarding: 1
+      log_martians: 0
+      send_redirects: 0
+  - name: internal
+    policies: |
+      policy inout accept
+      policy forward accept
+    if_features:
+      disable_ipv6: 0
+      autoconf: 1
+      rp_filter: 1
+      accept_redirects: 1
+      accept_source_route: 1
+      bootp_relay: 0
+      accept_ra: 0
+      forwarding: 1
+      log_martians: 0
+      send_redirects: 1
+
+bearwall2_interfaces:
+  - name: lo
+    class: loopback
+  - name: "{{ primary_interface }}"
+    class: external
+  - name: docker0
+    class: internal
+  - name: virbr0
+    class: internal

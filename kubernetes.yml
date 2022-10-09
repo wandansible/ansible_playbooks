@@ -1,0 +1,8 @@
+---
+- name: Deploy k3s services on k3s servers
+  hosts: k3s_servers
+  roles:
+    - wandansible.k3s
+    - role: wandansible.helm
+      when: not k3s_is_agent
+  environment: "{{ environment_variables }}"

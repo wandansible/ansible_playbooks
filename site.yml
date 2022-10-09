@@ -1,0 +1,14 @@
+---
+# Main ansible playbook
+
+- name: Sanity check before running playbook
+  import_playbook: sanity-check.yml
+
+- name: Site playbook (stage 1)
+  import_playbook: site.stage1.yml
+
+- name: Site playbook (stage 2)
+  import_playbook: site.stage2.yml
+
+- name: Stamp machines that ran playbooks successfully
+  import_playbook: stamp.yml

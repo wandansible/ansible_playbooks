@@ -1,0 +1,34 @@
+---
+offline: true
+
+enable_list:
+  - no-log-password
+  - no-same-owner
+  - yaml
+
+use_default_rules: true
+rulesdir:
+  - ./ansible-lint/rules/
+
+warn_list:
+  - line-length
+  - no-handler
+  - no-tabs
+
+skip_list:
+  - truthy
+  - yaml[truthy]
+  - role-name
+  - empty-string-compare
+  - unnamed-task
+  - no-changed-when
+
+kinds:
+  - requirements: "**/ansible/requirements.yml"
+  - requirements: "**/ansible.git/requirements.yml"
+  - playbook: "**/ansible/*.yml"
+  - playbook: "**/ansible.git/*.yml"
+
+exclude_paths:
+  - "${HOME}/.ansible/"
+  - "/etc/ansible"

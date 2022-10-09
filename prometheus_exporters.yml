@@ -1,0 +1,13 @@
+---
+- name: Deploy prometheus exporters
+  hosts: all
+  roles:
+    - role: wandansible.prometheus_exporter.apache
+      when: "'apache' in prometheus_exporters | default([])"
+    - role: wandansible.prometheus_exporter.blackbox
+      when: "'blackbox' in prometheus_exporters | default([])"
+    - role: wandansible.prometheus_exporter.mtail
+      when: "'mtail' in prometheus_exporters | default([])"
+    - role: wandansible.prometheus_exporter.node
+      when: "'node' in prometheus_exporters | default([])"
+  environment: "{{ environment_variables }}"

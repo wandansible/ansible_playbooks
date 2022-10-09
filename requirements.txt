@@ -1,0 +1,4 @@
+ansible>=5.4.0
+netaddr
+jmespath
+ansible-lint

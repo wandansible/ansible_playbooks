@@ -1,0 +1,9 @@
+---
+- name: Sanity check before running playbook
+  hosts: all
+  roles:
+    - sanity-check
+  gather_facts: no
+  run_once: true
+  become: false
+  environment: "{{ environment_variables }}"

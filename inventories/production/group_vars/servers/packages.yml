@@ -1,0 +1,15 @@
+---
+servers_packages_install:
+  - "conntrack"
+  - "curl"
+  - "dnsutils"
+  - "ethtool"
+  - "git"
+  - "htop"
+  - "mtr-tiny"
+  - "nmon"
+  - "rsync"
+  - "screen"
+  - "tcpdump"
+  - "tmux"
+  - "vim"

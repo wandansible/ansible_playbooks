@@ -1,0 +1,6 @@
+---
+- name: Deploy github actions runner controller services on github actions runner controllers
+  hosts: github_actions_runner_controllers
+  roles:
+    - wandansible.github_actions_runner_controller
+  environment: "{{ environment_variables }}"
